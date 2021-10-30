@@ -19,6 +19,7 @@
         "contacts": ["south london", "north london", "east london"], //groups or phone numbers
     },
     "management": [{
+            // No longer phone number but User ID
             "phoneNumberOfJamal": {
                 "Permission": ["Write, Delete"],
                 "name": "Jamal Yusuf"
