@@ -1,9 +1,10 @@
 import mongoose from "mongoose"
 // Currently locally running database => This will be the URI of the Docker container later
 let server = process.env.MONGOURL
-const database = "shimbiir_sheeko"
+const database = "SHIMBIR"
 
 export const connectDB = async () => {
+
     try {
         // to access the database
        // "mongodb://localhost:47017" <-- outside of docker
@@ -16,6 +17,7 @@ export const connectDB = async () => {
         // no username/password required
         if (server === undefined) {
             server = "mongodb://localhost:47017"
+            console.log("here")
         }
         await mongoose.connect(`${server}/${database}`);
         console.log('MongoDB connected!!');
@@ -23,3 +25,7 @@ export const connectDB = async () => {
         console.log('Failed to connect to MongoDB', err);
     }
 };
+
+
+// In docker yml & in process.env
+// "mongodb://mongo:27017

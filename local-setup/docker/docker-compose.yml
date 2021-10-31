@@ -1,31 +1,27 @@
 version: '3.8'
 services:
 
-  users:
-    env_file:
-    - .env
-    build:
-      context: ../../.
-      dockerfile: local-setup/docker/go.src.dockerfile
-      args:
-      - API_VERSION=1
-      - PACKAGE=users
-    #environment:
-    #- PORT=80
-    command: [ "./app", "-mongoURL", "mongodb://mongo:27017"]
-    networks:
-    - apinet
-    depends_on:
-    - mongo
-
   groups:
     env_file:
       - .env
     build:
       context: ../../.
-      dockerfile: local-setup/docker/node.src.dockerfile
+      dockerfile: local-setup/docker/groups.src.dockerfile
     environment:
-      - MONGOURL="mongodb://mongo:27017"
+      - MONGOURL=mongodb://mongo:27017
+    networks:
+      - apinet
+    depends_on:
+      - mongo
+
+  users:
+    env_file:
+      - .env
+    build:
+      context: ../../.
+      dockerfile: local-setup/docker/users.src.dockerfile
+    environment:
+      - MONGOURL=mongodb://mongo:27017
     networks:
       - apinet
     depends_on:
