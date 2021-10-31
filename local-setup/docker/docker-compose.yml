@@ -1,0 +1,62 @@
+version: '3.8'
+services:
+
+  users:
+    env_file:
+    - .env
+    build:
+      context: ../../.
+      dockerfile: local-setup/docker/go.src.dockerfile
+      args:
+      - API_VERSION=1
+      - PACKAGE=users
+    #environment:
+    #- PORT=80
+    command: [ "./app", "-mongoURL", "mongodb://mongo:27017"]
+    networks:
+    - apinet
+    depends_on:
+    - mongo
+
+  groups:
+    env_file:
+      - .env
+    build:
+      context: ../../.
+      dockerfile: local-setup/docker/node.src.dockerfile
+    environment:
+      - MONGOURL="mongodb://mongo:27017"
+    networks:
+      - apinet
+    depends_on:
+      - mongo
+
+  mongo:
+    build:
+      context: .
+      dockerfile: mongo.src.dockerfile
+    environment:
+      - MONGO_INITDB_DATABASE=SHIMBIR
+    ports:
+    - 47017:27017
+    networks:
+    - apinet
+  
+  webserver:
+    build:
+      context: ../../.
+      dockerfile: local-setup/docker/local-nginx.dockerfile
+    ports:
+    - 30088:80
+    networks:
+    - apinet
+    depends_on:
+    - users
+#    - groups
+#    - sms
+#    - calling
+#    - frontend
+
+
+networks:
+  apinet:
