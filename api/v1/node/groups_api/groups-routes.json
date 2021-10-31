@@ -1,0 +1,252 @@
+// APIS all fall under /api path
+
+hostname = ["localhost", "camelapp.com"]
+hostname/api
+
+
+
+APIs
+
+all endpoints should have headers:
+User: "userID" // the current user who is executing calls ID
+
+
+// get groups 
+// TODO fetching groups together and querying them
+// TODO meta information about groups, such as number of members and stats
+
+// get group by ID
+/group{id}
+
+// successful 
+{
+    "info": {
+        "name": "London football everybody",
+        "description": "People in london having fun",
+        "location": 
+        {
+            "city": "London",
+            "Country": "UK",
+            "GeoLocation": "Latitude/Long" 
+        },
+        "contacts": ["south london", "north london", "east london"], //groups or phone numbers
+    },
+    "management": [{
+            "phoneNumberOfJamal": {
+                "Permission": ["Write, Delete"],
+                "name": "Jamal Yusuf"
+            }
+        }
+
+    ]
+}
+
+//Get group by query 
+/group?
+
+//Queryable fields 
+createdDate 
+memberCount // minimum member count to filter by 
+Location.City 
+Location.Country 
+Void
+Name // Full text search but maybe we implement on front end
+Description // Full text search but maybe we implement on front end
+// request Body 
+{
+    "createdDate": "",
+    "memberCount": 0,
+    "City": "",
+    "Country": "",
+    "Void": true,
+    "Name": "", // Full text search but maybe we implement on front end
+    "Description": "",
+}
+// response body 
+[
+{
+    "info": {
+        "name": "London football everybody",
+        "description": "People in london having fun",
+        "location": 
+        {
+            "city": "London",
+            "Country": "UK",
+            "GeoLocation": "Latitude/Long" 
+        },
+        "contacts": ["south london", "north london", "east london"], //groups or phone numbers
+    },
+    "management": [{
+            "phoneNumberOfJamal": {
+                "Permission": ["Write, Delete"],
+                "name": "Jamal Yusuf"
+            }
+        }
+
+    ]
+}
+]
+
+/group // contact list management endpoint
+// post create new group 
+/group
+{
+    "info": {
+        "name": "London football everybody",
+        "description": "People in london having fun",
+        "location": 
+        {
+            "city": "London",
+            "Country": "UK",
+            "GeoLocation": "Latitude/Long" 
+        },
+        "contacts": ["south london", "north london", "east london"], //groups or phone numbers
+    },
+    "management": [{
+            "phoneNumberOfJamal": {
+                "Permission": ["Write, Delete"],
+                "name": "Jamal Yusuf"
+            }
+        }
+
+    ]
+}
+
+// response body successful 
+http.Status = 200 
+{
+    "info": {
+        "name": "London football everybody",
+        "description": "People in london having fun",
+        "contacts": ["south london", "north london", "east london"], //groups or phone numbers
+        "createdDate": "2021-10-10-0:00ZZ" // UTC Timestring
+    },
+    "management": [{
+            "phoneNumberOfJamal": {
+                "Permission": ["Write, Delete"],
+                "name": "Jamal Yusuf"
+            }
+        },
+    ],
+    "meta" : {
+        "createdDate" : "UTCTimeString", //UTC
+        "void": true, // boolean, is the group active 
+        "id": "dsfkljsdklfjdskl" // UniqueID
+    }
+}
+// response body unsuccessful 
+// Unsuccessful
+http.Status = "400-500"// 400 "Bad Request", 422 "Can't process request", 500 "Internal Server Error"
+{
+    "message" : "Couldn't process request",
+    "error":[
+        {
+            "status": "Unprocessible Entity",
+            "error": "Field to cannot be empty!",
+        },
+        {
+            "status": "Message is too long!",
+            "error": "Message is 1200 characters long, max is 1000",
+        },
+    ] 
+
+}
+
+//post modify group 
+/group/{id}
+//request body 
+/group
+{
+    "info": {
+        "name": "London football everybody",
+        "description": "People in london having fun",
+        "contacts": ["south london", "north london", "east london", "Group3"], //groups or phone numbers
+        "createdDate": "2021-10-10-0:00ZZ", // UTC Timestring
+        "location": 
+        {
+            "city": "London",
+            "Country": "UK",
+            "GeoLocation": "Latitude/Long" 
+        },
+    },
+    "management": [{
+            "phoneNumberOfJamal": {
+                "Permission": ["Write, Delete"],
+                "name": "Jamal Yusuf"
+            }
+        }
+    ]
+}
+// response body 
+http.Status = 200 
+{
+    "info": {
+        "name": "London football everybody",
+        "description": "People in london having fun",
+        "contacts": ["south london", "north london", "east london"], //groups or phone numbers
+        "createdDate": "2021-10-10-0:00ZZ" // UTC Timestring
+    },
+    "management": [{
+            "phoneNumberOfJamal": {
+                "Permission": ["Write, Delete"],
+                "name": "Jamal Yusuf"
+            }
+        },
+    ],
+    "meta" : {
+        "createdDate" : "UTCTimeString", //UTC
+        "void": false, // boolean, is the group active 
+        "id": "dsfkljsdklfjdskl" // Same ID, doesn't change.
+    }
+}
+
+
+// delete group 
+/group/{id}
+{
+    "phoneNumber": "somePhoneNumber" //TODO should be User.ID
+} // empty post body
+
+
+// delete successful 
+http.Status = 200 
+{
+    "info": {
+        "name": "London football everybody",
+        "description": "People in london having fun",
+        "contacts": ["south london", "north london", "east london"], //groups or phone numbers
+        "createdDate": "2021-10-10-0:00ZZ" // UTC Timestring
+    },
+    "management": [{
+            "phoneNumberOfJamal": {
+                "Permission": ["Write, Delete"],
+                "name": "Jamal Yusuf"
+            }
+        },
+    ],
+    "meta" : {
+        "createdDate" : "UTCTimeString", //UTC
+        "deletedDate" : "UTCTimeString",
+        "id": "dsfkljsdklfjdskl", // Same ID, doesn't change.
+        "void": true, // boolean, is the group active 
+    }
+}
+
+// delete unsuccessful 
+// Unsuccessful
+http.Status = "400-500"// 400 "Bad Request", 422 "Can't process request", 500 "Internal Server Error"
+{
+    "message" : "Couldn't process request , unauthorized user",
+    "error":[
+        {
+            "status": "Unauthorized user",
+            "error": "You do not have permission to delete this group!",
+        },
+        {
+            "status": "Message is too long!",
+            "error": "Message is 1200 characters long, max is 1000",
+        },
+    ] 
+
+}
+

@@ -10,11 +10,22 @@ export const GroupController = {
         res.send(response)
     },
     createNewGroup: async (req, res) => {
-        const { groupName, description, contacts} = req.body
-        console.log(groupName, description, contacts)
-        const { userid } = req.headers
-        const response = await GroupModel.createNewGroup(groupName, description, contacts, userid)
-        res.send(response)
+        try {
+            const { groupName, description, contacts } = req.body
+            const { userid } = req.headers
+            const response = await GroupModel.createNewGroup(groupName, description, contacts, userid)
+            res.send(response)
+        } catch (err) {
+            const response = {
+                message: err.message,
+                error: {
+                    statusCode: err.statusCode,
+                    stack: err.stack,
+                    message: err.errMessage
+                }
+            }
+            res.status(response.error.statusCode).send(response)
+        }
     },
     updateExistingGroup: async (req, res) => {
         const response = await GroupModel.updateExistingGroup()

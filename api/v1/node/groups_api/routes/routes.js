@@ -10,7 +10,7 @@ export const groupsRoutes = (app) => {
         GroupController.getGroupByFields(req,res)
     });
 
-    // Create new group
+    // Create new group ===> DONE
     app.post("/group", (req, res) => {
         GroupController.createNewGroup(req,res)
     });

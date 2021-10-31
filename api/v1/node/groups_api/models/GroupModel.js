@@ -8,23 +8,32 @@ export const GroupModel = {
 		return { message: "empty response" }
 	},
 	createNewGroup: async (groupName, description, contacts, userid) => {
-		console.log(groupName, description, contacts, userid)
+		try {
+			console.log(groupName, description, contacts, userid)
 
-		userid = userid.replace(/["']/g, "");
-        const admin = new GroupRole({ 
+			userid = userid.replace(/["']/g, "");
+			const admin = new GroupRole({
 				userid,
-                Permissions: ['Write','Delete', 'Read', 'Get']
-        })
-		const group = new Group({
-			info: {
-				groupName: groupName,
-				description,
-				contacts,
-			},
-			management: [ admin ],
-		})
-        const response = await saveData(group);
-		return response
+				Permissions: ['Write', 'Delete', 'Read', 'Get']
+			})
+			const group = new Group({
+				info: {
+					groupName: groupName,
+					description,
+					contacts,
+				},
+				management: [admin],
+			})
+			const response = await saveData(group);
+			return response
+		} catch (err) {
+			const error = new Error("Couldn't process request");
+			error.statusCode = 400
+			error.stack = err.stack
+			error.errMessage = err.message
+
+			throw error;
+		}
 	},
 	updateExistingGroup: async () => {
 		return { message: "empty response" }
