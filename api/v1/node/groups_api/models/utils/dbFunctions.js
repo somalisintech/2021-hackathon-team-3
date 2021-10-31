@@ -12,8 +12,9 @@ export const saveData = async (data) => {
 }
 
 export const findGroupById = async (id) => {
+	console.log(id)
 	return new Promise((resolve, reject) => {
-		Group.find({ meta: { id } }, (queryError, queryResults) => {
+		Group.findOne({id}, (queryError, queryResults) => {
 				if (queryError) {
 					reject(queryError);
 				}

@@ -2,8 +2,8 @@ import { GroupModel } from "../models/GroupModel.js"
 
 export const GroupController = {
     getGroupById: async (req, res) => {
-        const { groupid } = req.params
-		const response = await GroupModel.getGroupById(groupid)
+        const { groupId } = req.params
+		const response = await GroupModel.getGroupById(groupId)
 		res.send(response)
 	},
 	getGroupByFields: async (req, res) => {

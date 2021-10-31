@@ -2,7 +2,7 @@ import { GroupController } from "../controllers/GroupController.js";
 
 export const groupsRoutes = (app) => {
     // Get group by id
-    app.get("/group/:id", (req, res) => {
+    app.get("/group/:groupId", (req, res) => {
         GroupController.getGroupById(req,res)
     });
     // Get group by body
@@ -15,11 +15,11 @@ export const groupsRoutes = (app) => {
         GroupController.createNewGroup(req,res)
     });
     // Update existing group
-    app.put("/group/:id", (req, res) => {
+    app.put("/group/:groupId", (req, res) => {
         GroupController.updateExistingGroup(req,res)
     });
     // Delete a group
-    app.delete("/group/:id", (req, res) => {
+    app.delete("/group/:groupId", (req, res) => {
         GroupController.deleteGroup(req,res)
     })
 };

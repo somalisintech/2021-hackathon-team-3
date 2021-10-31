@@ -1,9 +1,15 @@
 import mongoose from "mongoose"
 import MUUID from "uuid-mongodb"
-const groupUUID = MUUID.v1()
+const groupUUID = uuidv4()
 const Schema = mongoose.Schema
+import { v4 as uuidv4 } from 'uuid';
 
 const GroupSchema = new Schema({
+        id: {
+            type: String,
+            required: true,
+            default: groupUUID
+        },
     info: {
         groupName: {
             type: String,
@@ -32,11 +38,6 @@ const GroupSchema = new Schema({
         },
         deletedDate: {
                 type: Date,
-        },
-        id: {
-            type: String,
-            required: true,
-            default: groupUUID
         },
         notvoid: {
             type: Boolean,
