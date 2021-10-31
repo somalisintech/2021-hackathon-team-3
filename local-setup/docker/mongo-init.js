@@ -1,6 +1,6 @@
 use SHIMBIR
 db = new Mongo().getDB("SHIMBIR");
-db.createCollection('handlers', { capped: false });
+db.createCollection('users', { capped: false });
 db.createCollection('groups', { capped: false });
 db.createCollection('alerts', { capped: false });
 db.users.insert([
