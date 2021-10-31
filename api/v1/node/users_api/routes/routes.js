@@ -7,6 +7,14 @@ export const userRoutes = (app) => {
     });
     // Delete a group
     app.delete("/user/:UserId", (req, res) => {
-        UserController.deleteUser(req,res)
+        UserController.deleteUser(req, res)
+    });
+    // Find users by fields
+    app.get("/user", (req, res) => {
+        UserController.findUserByFields(req,res)
+    })
+    // Find user by Id
+    app.get("/user/:UserId", (req, res) => {
+        UserController.findUserById(req,res)
     })
 };
