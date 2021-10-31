@@ -1,0 +1,121 @@
+
+// We don't need this anymore 
+/User
+
+//Request body 
+{
+    "Number": "202-731-3839",
+    "First Name": "Jamal",
+    "Last Name": "Yusuf",
+    "Alias": "President of Somalia Big Head",
+    "groups": ["group1", "group2"],
+    "Location": {
+        "city": "",
+        "country": "",
+        "geoLocation": ""
+    }
+}
+
+// Successful Response 
+{
+    "Number": "202-731-3839", //Mandatory
+    "First Name": "Jamal", //Mandatory
+    "Last Name": "Yusuf",
+    "Alias": "President of Somalia Big Head",
+    "groups": ["group1", "group2"], 
+    "Location": {
+        "city": "",
+        "country": "",
+        "geoLocation": "" //Mandatory
+    },
+    "meta" : {
+        "createdDate" : "UTCTimeString", //UTC
+        "void": false, // boolean, is the group active 
+        "id": "dsfkljsdklfjdskl" // Same ID, doesn't change.
+    }
+}
+
+// Unsuccessful Response 
+// Unsuccessful
+http.Status = "400-500"// 400 "Bad Request", 422 "Can't process request", 500 "Internal Server Error"
+{
+    "message" : "Missing field phone number cannot create user/ user already exist!",
+    "error":[
+        {
+            "status": "Unauthorized user",
+            "error": "You do not have permission to delete this group!",
+        },
+        {
+            "status": "Message is too long!",
+            "error": "Message is 1200 characters long, max is 1000",
+        },
+    ] 
+
+}
+
+
+
+// Modify a user  - if they are admin can modify any user. If not only themselves
+/User/{UserID}
+//  Request body 
+{
+    "Number": "202-731-3839", //Mandatory Admin can modify only
+    "First Name": "Jamal", //Mandatory // Admin and Self
+    "Last Name": "Yusuf", // Admin and Self
+    "Alias": "President of Somalia Big Head", // Admin and Self
+    "groups": ["group1", "group2"], // Admin and Self
+    "Location": {
+        "city": "", // Admin and Self
+        "country": "", // Admin and Self
+        "geoLocation": "" //Mandatory Admin
+    },
+    "meta" : {
+        "void": false, // boolean, is the group active Admin/Self
+    }
+}
+
+// success response 
+// Successful Response 
+{
+    "Number": "202-731-3839", //Mandatory
+    "First Name": "Jamal", //Mandatory
+    "Last Name": "Yusuf",
+    "Alias": "President of Somalia Big Head",
+    "groups": ["group1", "group2"], 
+    "Location": {
+        "city": "",
+        "country": "",
+        "geoLocation": "" //Mandatory
+    },
+    "meta" : {
+        "createdDate" : "UTCTimeString", //UTC
+        "void": false, // boolean, is the group active 
+        "id": "dsfkljsdklfjdskl" // Same ID, doesn't change.
+    }
+}
+
+// Unsuccessful response
+http.Status = "400-500"// 400 "Bad Request", 422 "Can't process request", 500 "Internal Server Error"
+{
+    "message" : "Missing field phone number cannot create user/ user already exist!",
+    "error":[
+        {
+            "status": "Unauthorized user",
+            "error": "You do not have permission to delete this group!",
+        },
+        {
+            "status": "Message is too long!",
+            "error": "Message is 1200 characters long, max is 1000",
+        },
+    ] 
+
+}
+
+// Delete a user 
+/User/{UserID} // Mohammed's UserID, we need request header
+httpMethod.Delete 
+{} // no body needed
+
+// delete a user response 
+httpStatus.Code= 200 
+{
