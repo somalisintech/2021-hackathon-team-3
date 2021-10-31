@@ -4,6 +4,7 @@ let server = process.env.MONGOURL
 const database = "SHIMBIR"
 
 export const connectDB = async () => {
+
     try {
         // to access the database
        // "mongodb://localhost:47017" <-- outside of docker
