@@ -3,8 +3,20 @@ import { GroupModel } from "../models/GroupModel.js"
 export const GroupController = {
     getGroupById: async (req, res) => {
         const { groupId } = req.params
-		const response = await GroupModel.getGroupById(groupId)
-		res.send(response)
+        try {
+            const response = await GroupModel.getGroupById(groupId)
+            res.send(response)
+        } catch (err) {
+            const response = {
+				message: err.message,
+				error: {
+					statusCode: err.statusCode,
+					stack: err.stack,
+					message: err.errMessage,
+				},
+			}
+			res.status(response.error.statusCode).send(response)
+        }
 	},
 	getGroupByFields: async (req, res) => {
 		const response = await GroupModel.getGroupByFields()
@@ -39,14 +51,15 @@ export const GroupController = {
 	},
 	deleteGroup: async (req, res) => {
 		try {
-			const { userid } = req.headers
-			const response = await GroupModel.deleteGroup(userid)
+            const { groupId } = req.params
+            console.log(groupId)
+			const response = await GroupModel.deleteGroup(groupId)
 			res.send(response)
 		} catch (err) {
 			const response = {
-				message: err.message,
+				message: err.message || "Internal Error",
 				error: {
-					statusCode: err.statusCode,
+					statusCode: err.statusCode || 500,
 					stack: err.stack,
 					message: err.errMessage,
 				},

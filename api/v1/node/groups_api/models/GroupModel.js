@@ -1,5 +1,5 @@
 import { Group, GroupRole } from "../schemas/GroupSchema.js"
-import { saveData, findGroupById } from "./utils/dbFunctions.js"
+import { saveData, findGroupById, deleteAGroup } from "./utils/dbFunctions.js"
 export const GroupModel = {
 	getGroupById: async (groupId) => {
 		try {
@@ -7,6 +7,20 @@ export const GroupModel = {
 			return response
 		} catch (err) {
 			const error = new Error("Couldn't find group")
+			error.statusCode = 400
+			error.stack = err.stack
+			error.errMessage = err.message
+
+			throw error
+		}
+	},
+	deleteGroup: async (groupId) => {
+		try {
+			await deleteAGroup(groupId)
+			const response = await findGroupById(groupId);
+			return response
+		} catch (err) {
+			const error = new Error(`Couldn't delete group: ${groupId}`)
 			error.statusCode = 400
 			error.stack = err.stack
 			error.errMessage = err.message
@@ -47,8 +61,5 @@ export const GroupModel = {
 	},
 	updateExistingGroup: async () => {
 		return { message: "empty response" }
-	},
-	deleteGroup: async (userid) => {
-		return { message: "empty response" }
-	},
+	}
 }

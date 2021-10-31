@@ -12,9 +12,27 @@ export const saveData = async (data) => {
 }
 
 export const findGroupById = async (id) => {
-	console.log(id)
 	return new Promise((resolve, reject) => {
 		Group.findOne({id}, (queryError, queryResults) => {
+				if (queryError) {
+					reject(queryError);
+				}
+				resolve(queryResults);
+			});
+	});
+};
+
+export const deleteAGroup = async (id) => {
+	return new Promise((resolve, reject) => {
+		Group.updateOne({ id },
+			{
+				$set: {
+					meta: {
+						notvoid: false
+					}
+				}
+			},
+			(queryError, queryResults) => {
 				if (queryError) {
 					reject(queryError);
 				}
