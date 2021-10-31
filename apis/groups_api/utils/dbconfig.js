@@ -8,6 +8,7 @@ export const connectDB = async () => {
         await mongoose.connect(`mongodb://${server}/${database}`);
 
         console.log('MongoDB connected!!');
+        console.log(process.env.SUPERVAR)
     } catch (err) {
         console.log('Failed to connect to MongoDB', err);
     }
