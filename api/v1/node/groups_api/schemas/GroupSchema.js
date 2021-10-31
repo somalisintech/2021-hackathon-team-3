@@ -24,26 +24,6 @@ const GroupSchema = new Schema({
     management: {
         type: Array,
         required: true,
-        default: {
-            userId: {
-                type: Object,
-                required: true,
-                full_name: {
-                    type: String,
-                    required: true,
-                },
-                Alias: {
-                    type: String,
-                    default: "hi"
-                },
-                Permission: {
-                    required: true,
-                    type: [String],
-                    enum: ['Write', 'Delete', 'Read', 'Get'],
-                    default: ['Write', 'Delete', 'Read', 'Get']
-                }
-            }
-        }
     },
     meta: {
         createdDate: {
@@ -71,12 +51,12 @@ export const Group = mongoose.model("Group", GroupSchema);
 
 
 const GroupRoleSchema = new Schema({
-    userId: {
-        type: Object,
-        required: true,
+    userid: {
+        type: String,
+        required: true
+        },
         full_name: {
             type: String,
-            required: true,
         },
         Alias: {
             type: String,
@@ -85,7 +65,6 @@ const GroupRoleSchema = new Schema({
             required: true,
             type: [String],
         }
-    }
 })
 
 export const GroupRole = mongoose.model("GroupRole", GroupRoleSchema);

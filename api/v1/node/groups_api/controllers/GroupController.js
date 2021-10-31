@@ -10,8 +10,10 @@ export const GroupController = {
         res.send(response)
     },
     createNewGroup: async (req, res) => {
-        const { groupname, description, contacts, userid, full_name, alias } = req.headers
-        const response = await GroupModel.createNewGroup(groupname, description, contacts, userid, full_name, alias)
+        const { groupName, description, contacts} = req.body
+        console.log(groupName, description, contacts)
+        const { userid } = req.headers
+        const response = await GroupModel.createNewGroup(groupName, description, contacts, userid)
         res.send(response)
     },
     updateExistingGroup: async (req, res) => {

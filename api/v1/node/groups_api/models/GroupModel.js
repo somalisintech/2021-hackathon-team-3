@@ -7,17 +7,17 @@ export const GroupModel = {
 	getGroupByFields: async () => {
 		return { message: "empty response" }
 	},
-    createNewGroup: async (groupname, description, contacts, userid, full_name, alias) => {
-        const admin = new GroupRole({
-            userid: {
-                full_name,
-                Alias: alias,
-                Permission: ['Write','Delete', 'Read', 'Get']
-            }
+	createNewGroup: async (groupName, description, contacts, userid) => {
+		console.log(groupName, description, contacts, userid)
+
+		userid = userid.replace(/["']/g, "");
+        const admin = new GroupRole({ 
+				userid,
+                Permissions: ['Write','Delete', 'Read', 'Get']
         })
 		const group = new Group({
 			info: {
-				groupName: groupname,
+				groupName: groupName,
 				description,
 				contacts,
 			},

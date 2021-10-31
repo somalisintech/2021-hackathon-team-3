@@ -4,7 +4,6 @@ let server = process.env.MONGOURL
 const database = "SHIMBIR"
 
 export const connectDB = async () => {
-
     try {
         // to access the database
        // "mongodb://localhost:47017" <-- outside of docker
@@ -17,7 +16,6 @@ export const connectDB = async () => {
         // no username/password required
         if (server === undefined) {
             server = "mongodb://localhost:47017"
-            console.log("here")
         }
         await mongoose.connect(`${server}/${database}`);
         console.log('MongoDB connected!!');
