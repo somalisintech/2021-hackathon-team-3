@@ -1,7 +1,6 @@
 import mongoose from "mongoose"
 import MUUID from "uuid-mongodb"
 const groupUUID = MUUID.v1()
-const userUUID = MUUID.v1()
 const Schema = mongoose.Schema
 
 const GroupSchema = new Schema({

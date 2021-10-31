@@ -10,3 +10,14 @@ export const saveData = async (data) => {
 		})
 	})
 }
+
+export const findGroupById = async (id) => {
+	return new Promise((resolve, reject) => {
+		Group.find({ meta: { id } }, (queryError, queryResults) => {
+				if (queryError) {
+					reject(queryError);
+				}
+				resolve(queryResults);
+			});
+	});
+};

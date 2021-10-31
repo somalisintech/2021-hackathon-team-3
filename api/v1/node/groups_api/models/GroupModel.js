@@ -1,8 +1,18 @@
 import { Group, GroupRole } from "../schemas/GroupSchema.js"
-import { saveData } from "./utils/dbFunctions.js"
+import { saveData, findGroupById } from "./utils/dbFunctions.js"
 export const GroupModel = {
-	getGroupById: async () => {
-		return { message: "empty response" }
+	getGroupById: async (groupId) => {
+		try {
+			const response = await findGroupById(groupId)
+			return response
+		} catch (err) {
+			const error = new Error("Couldn't find group")
+			error.statusCode = 400
+			error.stack = err.stack
+			error.errMessage = err.message
+
+			throw error
+		}
 	},
 	getGroupByFields: async () => {
 		return { message: "empty response" }
@@ -11,10 +21,10 @@ export const GroupModel = {
 		try {
 			console.log(groupName, description, contacts, userid)
 
-			userid = userid.replace(/["']/g, "");
+			userid = userid.replace(/["']/g, "")
 			const admin = new GroupRole({
 				userid,
-				Permissions: ['Write', 'Delete', 'Read', 'Get']
+				Permissions: ["Write", "Delete", "Read", "Get"],
 			})
 			const group = new Group({
 				info: {
@@ -24,21 +34,21 @@ export const GroupModel = {
 				},
 				management: [admin],
 			})
-			const response = await saveData(group);
+			const response = await saveData(group)
 			return response
 		} catch (err) {
-			const error = new Error("Couldn't process request");
+			const error = new Error("Couldn't process request")
 			error.statusCode = 400
 			error.stack = err.stack
 			error.errMessage = err.message
 
-			throw error;
+			throw error
 		}
 	},
 	updateExistingGroup: async () => {
 		return { message: "empty response" }
 	},
-	deleteGroup: async () => {
+	deleteGroup: async (userid) => {
 		return { message: "empty response" }
 	},
 }
