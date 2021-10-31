@@ -1,0 +1,690 @@
+// APIS all fall under /api path
+
+hostname = ["localhost", "camelapp.com"]
+hostname/api
+
+
+
+APIs
+
+all endpoints should have headers:
+User: "userID" // the current user who is executing calls ID
+
+
+// get groups 
+// TODO fetching groups together and querying them
+// TODO meta information about groups, such as number of members and stats
+
+// get group by ID
+/group{id}
+
+// successful 
+{
+    "info": {
+        "name": "London football everybody",
+        "description": "People in london having fun",
+        "location": 
+        {
+            "city": "London",
+            "Country": "UK",
+            "GeoLocation": "Latitude/Long" 
+        },
+        "contacts": ["south london", "north london", "east london"], //groups or phone numbers
+    },
+    "management": [{
+            "phoneNumberOfJamal": {
+                "Permission": ["Write, Delete"],
+                "name": "Jamal Yusuf"
+            }
+        }
+
+    ]
+}
+
+//Get group by query 
+/group?
+
+//Queryable fields 
+createdDate 
+memberCount // minimum member count to filter by 
+Location.City 
+Location.Country 
+Void
+Name // Full text search but maybe we implement on front end
+Description // Full text search but maybe we implement on front end
+// request Body 
+{
+    "createdDate": "",
+    "memberCount": 0,
+    "City": "",
+    "Country": "",
+    "Void": true,
+    "Name": "", // Full text search but maybe we implement on front end
+    "Description": "",
+}
+// response body 
+[
+{
+    "info": {
+        "name": "London football everybody",
+        "description": "People in london having fun",
+        "location": 
+        {
+            "city": "London",
+            "Country": "UK",
+            "GeoLocation": "Latitude/Long" 
+        },
+        "contacts": ["south london", "north london", "east london"], //groups or phone numbers
+    },
+    "management": [{
+            "phoneNumberOfJamal": {
+                "Permission": ["Write, Delete"],
+                "name": "Jamal Yusuf"
+            }
+        }
+
+    ]
+}
+]
+
+/group // contact list management endpoint
+// post create new group 
+/group
+{
+    "info": {
+        "name": "London football everybody",
+        "description": "People in london having fun",
+        "location": 
+        {
+            "city": "London",
+            "Country": "UK",
+            "GeoLocation": "Latitude/Long" 
+        },
+        "contacts": ["south london", "north london", "east london"], //groups or phone numbers
+    },
+    "management": [{
+            "phoneNumberOfJamal": {
+                "Permission": ["Write, Delete"],
+                "name": "Jamal Yusuf"
+            }
+        }
+
+    ]
+}
+
+// response body successful 
+http.Status = 200 
+{
+    "info": {
+        "name": "London football everybody",
+        "description": "People in london having fun",
+        "contacts": ["south london", "north london", "east london"], //groups or phone numbers
+        "createdDate": "2021-10-10-0:00ZZ" // UTC Timestring
+    },
+    "management": [{
+            "phoneNumberOfJamal": {
+                "Permission": ["Write, Delete"],
+                "name": "Jamal Yusuf"
+            }
+        },
+    ],
+    "meta" : {
+        "createdDate" : "UTCTimeString", //UTC
+        "void": true, // boolean, is the group active 
+        "id": "dsfkljsdklfjdskl" // UniqueID
+    }
+}
+// response body unsuccessful 
+// Unsuccessful
+http.Status = "400-500"// 400 "Bad Request", 422 "Can't process request", 500 "Internal Server Error"
+{
+    "message" : "Couldn't process request",
+    "error":[
+        {
+            "status": "Unprocessible Entity",
+            "error": "Field to cannot be empty!",
+        },
+        {
+            "status": "Message is too long!",
+            "error": "Message is 1200 characters long, max is 1000",
+        },
+    ] 
+
+}
+
+//post modify group 
+/group/{id}
+//request body 
+/group
+{
+    "info": {
+        "name": "London football everybody",
+        "description": "People in london having fun",
+        "contacts": ["south london", "north london", "east london", "Group3"], //groups or phone numbers
+        "createdDate": "2021-10-10-0:00ZZ", // UTC Timestring
+        "location": 
+        {
+            "city": "London",
+            "Country": "UK",
+            "GeoLocation": "Latitude/Long" 
+        },
+    },
+    "management": [{
+            "phoneNumberOfJamal": {
+                "Permission": ["Write, Delete"],
+                "name": "Jamal Yusuf"
+            }
+        }
+    ]
+}
+// response body 
+http.Status = 200 
+{
+    "info": {
+        "name": "London football everybody",
+        "description": "People in london having fun",
+        "contacts": ["south london", "north london", "east london"], //groups or phone numbers
+        "createdDate": "2021-10-10-0:00ZZ" // UTC Timestring
+    },
+    "management": [{
+            "phoneNumberOfJamal": {
+                "Permission": ["Write, Delete"],
+                "name": "Jamal Yusuf"
+            }
+        },
+    ],
+    "meta" : {
+        "createdDate" : "UTCTimeString", //UTC
+        "void": false, // boolean, is the group active 
+        "id": "dsfkljsdklfjdskl" // Same ID, doesn't change.
+    }
+}
+
+
+// delete group 
+/group/{id}
+{
+    "phoneNumber": "somePhoneNumber" //TODO should be User.ID
+} // empty post body
+
+
+// delete successful 
+http.Status = 200 
+{
+    "info": {
+        "name": "London football everybody",
+        "description": "People in london having fun",
+        "contacts": ["south london", "north london", "east london"], //groups or phone numbers
+        "createdDate": "2021-10-10-0:00ZZ" // UTC Timestring
+    },
+    "management": [{
+            "phoneNumberOfJamal": {
+                "Permission": ["Write, Delete"],
+                "name": "Jamal Yusuf"
+            }
+        },
+    ],
+    "meta" : {
+        "createdDate" : "UTCTimeString", //UTC
+        "deletedDate" : "UTCTimeString",
+        "id": "dsfkljsdklfjdskl", // Same ID, doesn't change.
+        "void": true, // boolean, is the group active 
+    }
+}
+
+// delete unsuccessful 
+// Unsuccessful
+http.Status = "400-500"// 400 "Bad Request", 422 "Can't process request", 500 "Internal Server Error"
+{
+    "message" : "Couldn't process request , unauthorized user",
+    "error":[
+        {
+            "status": "Unauthorized user",
+            "error": "You do not have permission to delete this group!",
+        },
+        {
+            "status": "Message is too long!",
+            "error": "Message is 1200 characters long, max is 1000",
+        },
+    ] 
+
+}
+
+
+
+// get
+//sms - send and receive text message
+
+// phoneNumber Object (potential header)
+type User {
+    "Number": "202-731-3839",
+    "First Name": "Jamal",
+    "Last Name": "Yusuf",
+    "Alias": "President of Somalia Big Head",
+    "Id": "ID001",
+    "groups": ["group1", "group2"],
+    "Location": {
+        "city": "",
+        "country": "",
+        "geoLocation": ""
+    },
+    "isAdmin" : true // can modify other users 
+}
+
+
+// create user endpoint 
+/User
+
+//Request body 
+{
+    "Number": "202-731-3839",
+    "First Name": "Jamal",
+    "Last Name": "Yusuf",
+    "Alias": "President of Somalia Big Head",
+    "groups": ["group1", "group2"],
+    "Location": {
+        "city": "",
+        "country": "",
+        "geoLocation": ""
+    }
+}
+
+// Successful Response 
+{
+    "Number": "202-731-3839", //Mandatory
+    "First Name": "Jamal", //Mandatory
+    "Last Name": "Yusuf",
+    "Alias": "President of Somalia Big Head",
+    "groups": ["group1", "group2"], 
+    "Location": {
+        "city": "",
+        "country": "",
+        "geoLocation": "" //Mandatory
+    },
+    "meta" : {
+        "createdDate" : "UTCTimeString", //UTC
+        "void": false, // boolean, is the group active 
+        "id": "dsfkljsdklfjdskl" // Same ID, doesn't change.
+    }
+}
+
+// Unsuccessful Response 
+// Unsuccessful
+http.Status = "400-500"// 400 "Bad Request", 422 "Can't process request", 500 "Internal Server Error"
+{
+    "message" : "Missing field phone number cannot create user/ user already exist!",
+    "error":[
+        {
+            "status": "Unauthorized user",
+            "error": "You do not have permission to delete this group!",
+        },
+        {
+            "status": "Message is too long!",
+            "error": "Message is 1200 characters long, max is 1000",
+        },
+    ] 
+
+}
+
+// Modify a user  - if they are admin can modify any user. If not only themselves
+/User/{UserID}
+//  Request body 
+{
+    "Number": "202-731-3839", //Mandatory Admin can modify only
+    "First Name": "Jamal", //Mandatory // Admin and Self
+    "Last Name": "Yusuf", // Admin and Self
+    "Alias": "President of Somalia Big Head", // Admin and Self
+    "groups": ["group1", "group2"], // Admin and Self
+    "Location": {
+        "city": "", // Admin and Self
+        "country": "", // Admin and Self
+        "geoLocation": "" //Mandatory Admin
+    },
+    "meta" : {
+        "void": false, // boolean, is the group active Admin/Self
+    }
+}
+
+// success response 
+// Successful Response 
+{
+    "Number": "202-731-3839", //Mandatory
+    "First Name": "Jamal", //Mandatory
+    "Last Name": "Yusuf",
+    "Alias": "President of Somalia Big Head",
+    "groups": ["group1", "group2"], 
+    "Location": {
+        "city": "",
+        "country": "",
+        "geoLocation": "" //Mandatory
+    },
+    "meta" : {
+        "createdDate" : "UTCTimeString", //UTC
+        "void": false, // boolean, is the group active 
+        "id": "dsfkljsdklfjdskl" // Same ID, doesn't change.
+    }
+}
+
+// Unsuccessful response
+http.Status = "400-500"// 400 "Bad Request", 422 "Can't process request", 500 "Internal Server Error"
+{
+    "message" : "Missing field phone number cannot create user/ user already exist!",
+    "error":[
+        {
+            "status": "Unauthorized user",
+            "error": "You do not have permission to delete this group!",
+        },
+        {
+            "status": "Message is too long!",
+            "error": "Message is 1200 characters long, max is 1000",
+        },
+    ] 
+
+}
+
+// Delete a user 
+/User/{UserID} // Mohammed's UserID, we need request header
+httpMethod.Delete 
+{} // no body needed
+
+// delete a user response 
+httpStatus.Code= 200 
+{
+
+}
+//http/post
+hostname/api/sms/{UserID} <-- Who is sending
+// Request Body 
+{
+    "to" : ["number1", "number2", "group2"], // pass in numbers or groups
+    "message":  // Mandatory
+    {
+            "topic": "Info", // others are warning, emergency
+            "color": "#00FF00",
+            "text": "message"
+    }  
+}
+
+// Response Body 
+
+// Successful 
+http.Method = 200 
+{
+    "to" : ["number1", "group2"], // pass in numbers or groups
+    "message":  // Mandatory
+    {
+            "topic": "Info", // others are warning, emergency
+            "color": "#00FF00",
+            "text": "message",
+    }, 
+    "meta" : {
+        "sent" : "UTCTimeString", //UTC
+        "void": false,
+        "NotSent": ["number2"]
+    }
+}
+// Unsuccessful
+http.Status = "400-500"// 400 "Bad Request", 422 "Can't process request", 500 "Internal Server Error"
+{
+    "message" : "Couldn't process request",
+    "error":[
+        {
+            "status": "Unprocessible Entity",
+            "error": "Field to cannot be empty!",
+        },
+        {
+            "status": "Message is too long!",
+            "error": "Message is 1200 characters long, max is 1000",
+        },
+    ] 
+
+}
+
+// delete a user 
+Users/{UserID}
+httpMethod.Delete 
+// request body 
+http.Status 200 
+{
+    "Number": "202-731-3839", //Mandatory
+    "First Name": "Jamal", //Mandatory
+    "Last Name": "Yusuf",
+    "Alias": "President of Somalia Big Head",
+    "groups": ["group1", "group2"], 
+    "Location": {
+        "city": "",
+        "country": "",
+        "geoLocation": "" //Mandatory
+    },
+    "meta" : {
+        "createdDate" : "UTCTimeString", //UTC
+        "deletedDate" : "UTCTimeString",
+        "void": true, // boolean, is the group active 
+        "id": "dsfkljsdklfjdskl" // Same ID, doesn't change.
+    }
+}
+
+
+// Get User
+Users/{UserID}
+httpMethod.Get
+//Response Body 
+http.Status 200 
+{
+    "Number": "202-731-3839", //Mandatory
+    "First Name": "Jamal", //Mandatory
+    "Last Name": "Yusuf",
+    "Alias": "President of Somalia Big Head",
+    "groups": ["group1", "group2"], 
+    "Location": {
+        "city": "",
+        "country": "",
+        "geoLocation": "" //Mandatory
+    },
+    "meta" : {
+        "createdDate" : "UTCTimeString", //UTC
+        "deletedDate" : "UTCTimeString",
+        "void": false, // boolean, is the group active 
+        "id": "dsfkljsdklfjdskl" // Same ID, doesn't change.
+    }
+}
+
+// get Users
+Users/{UserID}
+// Queryable 
+- PhoneNumber
+- FirstName
+- LastName
+- City
+- Country
+- GeoLocation 
+- createDate
+- groups // might need a custom index 
+
+// Requset Body 
+{
+    "phoneNumber": "",
+    "firstName": "",
+    "lastName": "",
+    "city": "",
+    "country": "",
+    "geoLocation": "",
+    "createdDate": "", 
+    "groups": ["", ""]
+}
+
+// Response body 
+{
+    "Users": [
+        {
+            "Number": "202-731-3839", //Mandatory
+            "First Name": "Jamal", //Mandatory
+            "Last Name": "Yusuf",
+            "Alias": "President of Somalia Big Head",
+            "groups": ["group1", "group2"],
+            "Location": {
+                "city": "",
+                "country": "",
+                "geoLocation": "" //Mandatory
+            },
+            "meta": {
+                "createdDate": "UTCTimeString", //UTC
+                "deletedDate": "UTCTimeString",
+                "void": false, // boolean, is the group active 
+                "id": "dsfkljsdklfjdskl" // Same ID, doesn't change.
+            },
+        }
+        ]
+    }
+    
+
+//empty response body 
+httpStatusCode.202 (no record)
+{
+    "Groups": null
+}
+
+// Unsuccessful
+http.Status = "400-500"// 400 "Bad Request", 422 "Can't process request", 500 "Internal Server Error"
+{
+    "message" : "Couldn't process request",
+    "error":[
+        {
+            "status": "Unprocessible Entity",
+            "error": "Field to cannot be empty!",
+        },
+        {
+            "status": "Message is too long!",
+            "error": "Message is 1200 characters long, max is 1000",
+        },
+    ] 
+
+}
+
+
+// Get Alert from group
+httpMethod.Get
+/alert/{GroupID}
+
+//Query 
+- startDate
+- endDate
+// default return todays messages up to 24 hours ago
+example:
+hostname:port/api/alert/df43dkd?startDate=""&endDate""
+
+// response body 
+{
+    "GroupID": "",
+    "Alerts" :[
+        {
+            "to" : "group2", // pass in numbers or groups
+            "message":  // Mandatory
+            {
+                    "topic": "Info", // others are warning, emergency
+                    "color": "#00FF00",
+                    "text": "message",
+            }, 
+            "meta" : {
+                "sent" : "UTCTimeString", //UTC
+                "void": false,
+                "NotSent": ["number2"]
+            }
+        } 
+    ]
+}
+
+//Get Alert from groups
+httpMethod.Post
+/Alert
+- startDate
+- endDate
+-Group
+
+//Request body 
+{
+    "startDate": "",
+    "endDate": "",
+    "Groups": ["", ""]
+}
+
+
+//respone body 
+// response body 
+{
+    "Groups": 
+    [
+        {
+            "GroupId" : "dsjkflsdjf",
+            "Alerts": [
+                {
+                        "to" : ["phoneNumber1","PhoneNumber2" "group2"], // pass in numbers or groups
+                        "message":  // Mandatory
+                        {
+                                "topic": "Info", // others are warning, emergency
+                                "color": "#00FF00",
+                                "text": "message",
+                        }, 
+                        "meta" : {
+                            "sent" : "UTCTimeString", //UTC
+                            "void": false,
+                            "NotSent": ["number2"]
+                        }
+                    }   
+            ]
+        },
+        {}
+    ]
+
+}
+
+//no groups found 
+httpMethod.Status 202 (no records found)
+{
+    "groups": null
+}
+// Unsuccessful
+http.Status = "400-500"// 400 "Bad Request", 422 "Can't process request", 500 "Internal Server Error"
+{
+    "message" : "Couldn't process request",
+    "error":[
+        {
+            "status": "Unprocessible Entity",
+            "error": "Field to cannot be empty!",
+        },
+        {
+            "status": "Message is too long!",
+            "error": "Message is 1200 characters long, max is 1000",
+        },
+    ] 
+
+}
+
+
+
+// Jamals stuff 
+
+// we in the header User
+/sms
+httpMethod.Post 
+
+//request Body 
+{
+    "to": ["phoneNumber1", "group2", "president of somalia", "london football"],
+    "message": {
+        "topic": "Info", // others are warning, emergency
+        "color": "#00FF00",
+        "text": "message"
+    }
+}
+
+/calling
+httpMethod.Post 
+//request Body 
+{
+    "to": ["phoneNumber1","phoneNumber2"], // Specfic numbers
+    "message": {
+        "topic": "Info", // others are warning, emergency,
+        "text": "message"
+    }
+}
