@@ -1,6 +1,7 @@
 # 2021-hackathon-team-3
 
-
+### not fully implemented
+This was a hackathon project and not fully implemented yet. Apologies.
 How to build app;
 
 Pre-requistes:
